@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Evaluation Form</title>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px 0;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            animation: pulse 8s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .breadcrumb a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .breadcrumb a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .breadcrumb span {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            margin: 20px 0;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+        
+        .col {
+            flex: 1;
+            padding: 0 10px;
+            min-width: 200px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: var(--light-bg);
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #3d9dc5;
+        }
+        
+        .btn-danger {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #d61a6c;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .total-score {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: var(--primary-color);
+        }
+        
+        .progress-container {
+            background-color: #ddd;
+            border-radius: 5px;
+            height: 10px;
+            margin-top: 10px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            border-radius: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            width: 0;
+            transition: width 1s ease-in-out;
+        }
+        
+        .criteria-table input {
+            width: 60px;
+            text-align: center;
+        }
+        
+        .info-box {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .animated-label {
+            position: relative;
+            font-weight: 400;
+            font-size: 16px;
+            color: #9e9e9e;
+            pointer-events: none;
+            transition: 0.2s ease all;
+        }
+        
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+            
+            .col {
+                margin-bottom: 15px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-right: 0;
+            }
+            
+            table {
+                font-size: 14px;
+            }
+            
+            .criteria-table input {
+                width: 40px;
+            }
+        }
+        footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 20px;
+  border-top: 1px solid #eee;
+  color: #666;
+}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Student Evaluation System</h1>
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <span>></span>
+                <a href="#" id="student-name-header">Student Profile</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Student Information</h2>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="studentName">Full Name</label>
+                        <input type="text" id="studentName" class="form-control" placeholder="Enter student name">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="mobileNumber">Mobile Number</label>
+                        <input type="tel" id="mobileNumber" class="form-control" placeholder="Enter mobile number">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="batchCode">Batch Code</label>
+                        <input type="text" id="batchCode" class="form-control" placeholder="Enter batch code">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="enrollmentDate">Enrollment Date</label>
+                        <input type="date" id="enrollmentDate" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="Enter email address">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="attendanceCount">Days Attended</label>
+                        <input type="number" id="attendanceCount" class="form-control" min="0" max="7" value="0" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Performance Evaluation</h2>
+            <div class="info-box">
+                Enter marks for each criterion (out of 10). Total score will be calculated automatically.
+            </div>
+
+            <div class="form-group">
+                <label for="sessionSelect">Select Session</label>
+                <select id="sessionSelect" class="form-control">
+                    <option value="0">Day 1: Basic Communication</option>
+                    <option value="1">Day 2: Impromptu Speaking</option>
+                    <option value="2">Day 3: Interview HR</option>
+                    <option value="3">Day 4: Interview Tech</option>
+                    <option value="4">Day 5: GD & Debate</option>
+                    <option value="5">Day 6: Presentation Skills</option>
+                    <option value="6">Day 7: Final Mock</option>
+                </select>
+            </div>
+
+            <table class="criteria-table">
+                <thead>
+                    <tr>
+                        <th>Criteria</th>
+                        <th>Description</th>
+                        <th>Score (0-10)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Fluency</td>
+                        <td>Smoothness and pace of speech</td>
+                        <td><input type="number" class="score-input form-control" data-criteria="fluency" min="0" max="10" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Grammar</td>
+                        <td>Correct use of grammatical structures</td>
+                        <td><input type="number" class="score-input form-control" data-criteria="grammar" min="0" max="10" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Body Language</td>
+                        <td>Gestures, posture, and non-verbal communication</td>
+                        <td><input type="number" class="score-input form-control" data-criteria="bodyLanguage" min="0" max="10" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Confidence</td>
+                        <td>Self-assurance and conviction in speaking</td>
+                        <td><input type="number" class="score-input form-control" data-criteria="confidence" min="0" max="10" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Knowledge</td>
+                        <td>Subject matter expertise and content</td>
+                        <td><input type="number" class="score-input form-control" data-criteria="knowledge" min="0" max="10" value="0"></td>
+                    </tr>
+                    <tr class="total-score">
+                        <td colspan="2">Total Score (out of 50)</td>
+                        <td id="totalScore">0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="form-group">
+                <label for="comments">Comments & Feedback</label>
+                <textarea id="comments" class="form-control" rows="4" placeholder="Enter comments or feedback for this session"></textarea>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Performance Summary</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Session</th>
+                        <th>Date</th>
+                        <th>Total Score</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody id="summaryTable">
+                    <!-- This will be populated by JavaScript -->
+                </tbody>
+            </table>
+
+            <div class="chart-container">
+                <canvas id="performanceChart" width="600" height="300"></canvas>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button id="saveBtn" class="btn btn-primary">Save Student Data</button>
+            <button id="updateBtn" class="btn btn-success">Update</button>
+            <button id="deleteBtn" class="btn btn-danger">Delete</button>
+            <button id="downloadBtn" class="btn btn-secondary">Download Report</button>
+            <button id="backBtn" class="btn btn-secondary">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        // Student data structure
+        let currentStudentId = null;
+        let students = JSON.parse(localStorage.getItem('students')) || [];
+        
+        // Session names array
+        const sessionNames = [
+            "Basic Communication",
+            "Impromptu Speaking",
+            "Interview HR",
+            "Interview Tech",
+            "GD & Debate",
+            "Presentation Skills",
+            "Final Mock"
+        ];
+        
+        // Initialize data structure for new student
+        const initializeNewStudent = () => {
+            return {
+                id: Date.now().toString(),
+                name: "",
+                mobile: "",
+                batchCode: "",
+                email: "",
+                enrollmentDate: "",
+                daysAttended: 0,
+                sessions: Array(7).fill().map(() => ({
+                    date: "",
+                    attended: false,
+                    scores: {
+                        fluency: 0,
+                        grammar: 0,
+                        bodyLanguage: 0,
+                        confidence: 0,
+                        knowledge: 0
+                    },
+                    totalScore: 0,
+                    percentage: 0,
+                    comments: ""
+                })),
+                totalScore: 0,
+                totalPercentage: 0,
+                grade: "N/A"
+            };
+        };
+        
+        // Current student data
+        let currentStudent = initializeNewStudent();
+        
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const studentId = urlParams.get('id');
+        
+        // DOM elements
+        const studentNameHeader = document.getElementById('student-name-header');
+        const studentNameInput = document.getElementById('studentName');
+        const mobileNumberInput = document.getElementById('mobileNumber');
+        const batchCodeInput = document.getElementById('batchCode');
+        const enrollmentDateInput = document.getElementById('enrollmentDate');
+        const emailInput = document.getElementById('email');
+        const attendanceCountInput = document.getElementById('attendanceCount');
+        const sessionSelect = document.getElementById('sessionSelect');
+        const scoreInputs = document.querySelectorAll('.score-input');
+        const totalScoreElement = document.getElementById('totalScore');
+        const commentsInput = document.getElementById('comments');
+        const progressBar = document.getElementById('progressBar');
+        const summaryTable = document.getElementById('summaryTable');
+        const saveBtn = document.getElementById('saveBtn');
+        const updateBtn = document.getElementById('updateBtn');
+        const deleteBtn = document.getElementById('deleteBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const backBtn = document.getElementById('backBtn');
+        
+        // Chart variables
+        let performanceChart = null;
+        
+        // If studentId is provided, load the student data
+        if (studentId) {
+            currentStudentId = studentId;
+            const foundStudent = students.find(s => s.id === studentId);
+            
+            if (foundStudent) {
+                currentStudent = foundStudent;
+                populateStudentInfo();
+                updateAttendanceCount();
+                populateSummaryTable();
+                initializeChart();
+                studentNameHeader.textContent = currentStudent.name || "Student Profile";
+            } else {
+                alert("Student not found!");
+                window.location.href = "index.html";
+            }
+        }
+        
+        // Populate student information fields
+        function populateStudentInfo() {
+            studentNameInput.value = currentStudent.name;
+            mobileNumberInput.value = currentStudent.mobile;
+            batchCodeInput.value = currentStudent.batchCode;
+            enrollmentDateInput.value = currentStudent.enrollmentDate;
+            emailInput.value = currentStudent.email;
+            updateSessionScores();
+        }
+        
+        // Update session score fields based on selected session
+        function updateSessionScores() {
+            const sessionIndex = parseInt(sessionSelect.value);
+            const session = currentStudent.sessions[sessionIndex];
+            
+            // Set each score input
+            scoreInputs.forEach(input => {
+                const criteria = input.dataset.criteria;
+                input.value = session.scores[criteria];
+            });
+            
+            // Update total score
+            totalScoreElement.textContent = session.totalScore;
+            commentsInput.value = session.comments || "";
+            
+            // Update progress bar
+            progressBar.style.width = `${session.percentage}%`;
+        }
+        
+        // Calculate total score for current session
+        function calculateTotalScore() {
+            let total = 0;
+            scoreInputs.forEach(input => {
+                total += parseInt(input.value) || 0;
+            });
+            return total;
+        }
+        
+        // Update attendance count
+        function updateAttendanceCount() {
+            const attendedSessions = currentStudent.sessions.filter(s => s.attended).length;
+            currentStudent.daysAttended = attendedSessions;
+            attendanceCountInput.value = attendedSessions;
+        }
+        
+        // Populate summary table
+        function populateSummaryTable() {
+            summaryTable.innerHTML = "";
+            currentStudent.sessions.forEach((session, index) => {
+                if (session.attended) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>Day ${index + 1}: ${sessionNames[index]}</td>
+                        <td>${session.date || 'N/A'}</td>
+                        <td>${session.totalScore}/50</td>
+                        <td>${session.percentage}%</td>
+                    `;
+                    summaryTable.appendChild(row);
+                }
+            });
+        }
+        
+        // Calculate overall grades and totals
+        function calculateOverallPerformance() {
+            let totalScore = 0;
+            let attendedSessions = 0;
+            
+            currentStudent.sessions.forEach(session => {
+                if (session.attended) {
+                    totalScore += session.totalScore;
+                    attendedSessions++;
+                }
+            });
+            
+            currentStudent.totalScore = totalScore;
+            
+            if (attendedSessions > 0) {
+                // Calculate percentage based on attended sessions
+                currentStudent.totalPercentage = Math.round((totalScore / (attendedSessions * 50)) * 100);
+                
+                // Assign grade
+                if (currentStudent.totalPercentage >= 90) {
+                    currentStudent.grade = "A+";
+                } else if (currentStudent.totalPercentage >= 80) {
+                    currentStudent.grade = "A";
+                } else if (currentStudent.totalPercentage >= 70) {
+                    currentStudent.grade = "B+";
+                } else if (currentStudent.totalPercentage >= 60) {
+                    currentStudent.grade = "B";
+                } else if (currentStudent.totalPercentage >= 50) {
+                    currentStudent.grade = "C";
+                } else {
+                    currentStudent.grade = "D";
+                }
+            } else {
+                currentStudent.totalPercentage = 0;
+                currentStudent.grade = "N/A";
+            }
+        }
+        
+        // Initialize chart
+        function initializeChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            
+            // Prepare data
+            const labels = [];
+            const data = [];
+            
+            currentStudent.sessions.forEach((session, index) => {
+                if (session.attended) {
+                    labels.push(`Day ${index + 1}`);
+                    data.push(session.totalScore);
+                }
+            });
+            
+            // Destroy existing chart if it exists
+            if (performanceChart) {
+                performanceChart.destroy();
+            }
+            
+            // Create new chart
+            performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Performance Score (out of 50)',
+                        data: data,
+                        fill: false,
+                        borderColor: '#4361ee',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 50
+                        }
+                    },
+                    responsive: true,
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeInOutQuad'
+                    }
+                }
+            });
+        }
+        
+        // Save data to localStorage
+        function saveToLocalStorage() {
+            // Find index of current student
+            const index = students.findIndex(s => s.id === currentStudent.id);
+            
+            if (index !== -1) {
+                students[index] = currentStudent;
+            } else {
+                students.push(currentStudent);
+            }
+            
+            localStorage.setItem('students', JSON.stringify(students));
+        }
+        
+        // Generate CSV for download
+        function generateCSV() {
+            let csv = "Student Name,Mobile,Batch Code,Email,Days Attended,Total Score,Percentage,Grade\n";
+            csv += `${currentStudent.name},${currentStudent.mobile},${currentStudent.batchCode},${currentStudent.email},${currentStudent.daysAttended},${currentStudent.totalScore},${currentStudent.totalPercentage}%,${currentStudent.grade}\n\n`;
+            
+            csv += "Session,Date,Fluency,Grammar,Body Language,Confidence,Knowledge,Total Score,Percentage\n";
+            
+            currentStudent.sessions.forEach((session, index) => {
+                if (session.attended) {
+                    csv += `Day ${index + 1}: ${sessionNames[index]},${session.date},${session.scores.fluency},${session.scores.grammar},${session.scores.bodyLanguage},${session.scores.confidence},${session.scores.knowledge},${session.totalScore},${session.percentage}%\n`;
+                }
+            });
+            
+            return csv;
+        }
+        
+        // Event Listeners
+        
+        // When session select changes
+        sessionSelect.addEventListener('change', updateSessionScores);
+        
+        // When score inputs change
+        scoreInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                // Validate input range
+                let value = parseInt(input.value) || 0;
+                if (value < 0) value = 0;
+                if (value > 10) value = 10;
+                input.value = value;
+                
+                // Update current session data
+                const sessionIndex = parseInt(sessionSelect.value);
+                const criteria = input.dataset.criteria;
+                currentStudent.sessions[sessionIndex].scores[criteria] = value;
+                
+                // Calculate and update total score
+                const total = calculateTotalScore();
+                currentStudent.sessions[sessionIndex].totalScore = total;
+                currentStudent.sessions[sessionIndex].percentage = Math.round((total / 50) * 100);
+                totalScoreElement.textContent = total;
+                
+                // Mark session as attended if any score is entered
+                if (!currentStudent.sessions[sessionIndex].attended && total > 0) {
+                    currentStudent.sessions[sessionIndex].attended = true;
+                    currentStudent.sessions[sessionIndex].date = new Date().toISOString().split('T')[0];
+                }
+                
+                // Update progress bar
+                progressBar.style.width = `${currentStudent.sessions[sessionIndex].percentage}%`;
+                
+                // Update summary data
+                updateAttendanceCount();
+                calculateOverallPerformance();
+                populateSummaryTable();
+                initializeChart();
+            });
+        });
+        
+        // When comments change
+        commentsInput.addEventListener('change', () => {
+            const sessionIndex = parseInt(sessionSelect.value);
+            currentStudent.sessions[sessionIndex].comments = commentsInput.value;
+        });
+        
+        // When student info changes
+        studentNameInput.addEventListener('change', () => {
+            currentStudent.name = studentNameInput.value;
+            studentNameHeader.textContent = currentStudent.name || "Student Profile";
+        });
+        
+        mobileNumberInput.addEventListener('change', () => {
+            currentStudent.mobile = mobileNumberInput.value;
+        });
+        
+        batchCodeInput.addEventListener('change', () => {
+            currentStudent.batchCode = batchCodeInput.value;
+        });
+        
+        emailInput.addEventListener('change', () => {
+            currentStudent.email = emailInput.value;
+        });
+        
+        enrollmentDateInput.addEventListener('change', () => {
+            currentStudent.enrollmentDate = enrollmentDateInput.value;
+        });
+        
+        // Save button
+        saveBtn.addEventListener('click', () => {
+            // Validate required fields
+            if (!studentNameInput.value) {
+                alert("Please enter student name");
+                return;
+            }
+            
+            if (!mobileNumberInput.value) {
+                alert("Please enter mobile number");
+                return;
+            }
+            
+            // Update final calculations
+            calculateOverallPerformance();
+            
+            // Save to localStorage
+            saveToLocalStorage();
+            
+            alert("Student data saved successfully!");
+            
+            // Redirect to home page
+            window.location.href = "index.html";
+        });
+        
+        // Update button
+        updateBtn.addEventListener('click', () => {
+            // Update final calculations
+            calculateOverallPerformance();
+            
+            // Save to localStorage
+            saveToLocalStorage();
+            
+            alert("Student data updated successfully!");
+            
+            // Refresh data display
+            populateSummaryTable();
+            initializeChart();
+        });
+        
+        // Delete button
+        deleteBtn.addEventListener('click', () => {
+            if (confirm("Are you sure you want to delete this student record?")) {
+                // Remove student from array
+                const index = students.findIndex(s => s.id === currentStudent.id);
+                if (index !== -1) {
+                    students.splice(index, 1);
+                    localStorage.setItem('students', JSON.stringify(students));
+                }
+                
+                alert("Student data deleted successfully!");
+                
+                // Redirect to home page
+                window.location.href = "index.html";
+            }
+        });
+        
+        // Download button
+        downloadBtn.addEventListener('click', () => {
+            const csv = generateCSV();
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', `${currentStudent.name}_report.csv`);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+        
+        // Back button
+        backBtn.addEventListener('click', () => {
+            window.location.href = "index.html";
+        });
+        
+        // Add animation on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.card').forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+        });
+    </script>
+    <footer>
+        <p>All Rights Reserved &copy; 2025 Developed By Gaurav Chourasiya</p>
+      </footer>
+</body>
+</html>
